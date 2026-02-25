@@ -55,7 +55,7 @@ ROOT_URLCONF = 'TiendaMagic.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates','GestorCartas.templates'],#Le indico donde tiene que ir a buscar las plantillas
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

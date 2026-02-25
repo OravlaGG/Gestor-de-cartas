@@ -1,8 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from GestorCartas.models import Carta
 
 # Create your views here.
 
+def home (request): # Pinta una página con render, también hay que darlo de
+    cartas = Carta.objects.all()
+    return render(request, "index.html", {"cartas": cartas})
+    return render(request,'index.html')
+  
 def login(request):
     return render(request,'login/index.html')
 
