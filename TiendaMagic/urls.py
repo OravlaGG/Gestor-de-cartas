@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from GestorCartas.views import home,login_user,logout_user
+from GestorCartas.views import home, login_user, logout_user, coleccion_usuario, agregar_a_coleccion, eliminar_coleccion
 
 urlpatterns = [
    path('admin/', admin.site.urls),
@@ -24,6 +24,9 @@ urlpatterns = [
    path('home/', home),
    path('login',login_user, name="login"),
    path('logout',logout_user, name="logout"),
+   path("mi-coleccion/", coleccion_usuario, name="coleccion_usuario"),
+   path("agregar/<int:carta_id>/", agregar_a_coleccion, name="agregar_a_coleccion"),
+   path("eliminar/<int:pk>/", eliminar_coleccion, name="eliminar_coleccion"),
 ]
 
 #Add Django site authentication urls (for login, logout, password management)

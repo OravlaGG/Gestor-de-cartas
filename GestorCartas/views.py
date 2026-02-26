@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from GestorCartas.models import Carta
+from GestorCartas.models import Carta, Coleccion
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -43,3 +44,35 @@ def logout_user(request):
     messages.success(request, 'Has hecho Logout')
     
     return redirect("home/")
+
+
+def coleccion_usuario(request):
+    coleccion = Coleccion.objects.filter(usuario=request.user).select_related("carta")
+    return render(request, "coleccion.html", {"coleccion": coleccion})
+
+
+@login_required
+
+def agregar_a_coleccion(request, carta_id):
+    carta = get_object_or_404(Carta, id=carta_id)
+
+    # Buscar si ya existe en la colección del usuario
+    coleccion_item, creado = Coleccion.objects.get_or_create(
+        usuario=request.user,
+        carta=carta,
+        defaults={"cantidad": 1}
+    )
+
+    # Si ya existía, aumentar cantidad
+    if not creado:
+        coleccion_item.cantidad += 1
+        coleccion_item.save()
+
+    return redirect("coleccion_usuario")
+
+
+@login_required
+def eliminar_coleccion(request, pk):
+    item = get_object_or_404(Coleccion, pk=pk, usuario=request.user)
+    item.delete()
+    return redirect("coleccion_usuario")
