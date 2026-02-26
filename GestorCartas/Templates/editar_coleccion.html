@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar {{ item.carta.nombre }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_cantidad" class="form-label">Cantidad</label>
+            <input 
+                type="number" 
+                name="cantidad" 
+                id="id_cantidad" 
+                class="form-control"
+                value="{{ form.cantidad.value }}"
+                min="1"
+            >
+        </div>
+
+        <div class="mb-3">
+            <label for="id_estado" class="form-label">Estado</label>
+            <select name="estado" id="id_estado" class="form-select">
+                {% for value, label in form.fields.estado.choices %}
+                    <option value="{{ value }}" {% if form.estado.value == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a href="{% url 'coleccion_usuario' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

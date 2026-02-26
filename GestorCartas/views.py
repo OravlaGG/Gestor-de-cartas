@@ -4,6 +4,7 @@ from GestorCartas.models import Carta, Coleccion
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .forms import ColeccionEditForm
 
 # Create your views here.
 
@@ -76,3 +77,20 @@ def eliminar_coleccion(request, pk):
     item = get_object_or_404(Coleccion, pk=pk, usuario=request.user)
     item.delete()
     return redirect("coleccion_usuario")
+
+@login_required
+def editar_coleccion(request, pk):
+    item = get_object_or_404(Coleccion, pk=pk, usuario=request.user)
+
+    if request.method == "POST":
+        form = ColeccionEditForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect("coleccion_usuario")
+    else:
+        form = ColeccionEditForm(instance=item)
+
+    return render(request, "editar_coleccion.html", {
+        "form": form,
+        "item": item
+    })
