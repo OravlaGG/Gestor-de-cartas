@@ -16,11 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from GestorCartas.views import home
+from GestorCartas.views import home,login_user,logout_user
 
 urlpatterns = [
    path('admin/', admin.site.urls),
    path('', home),
+   path('home/', home),
+   path('login',login_user, name="login"),
+   path('logout',logout_user, name="logout"),
 ]
 
 #Add Django site authentication urls (for login, logout, password management)
