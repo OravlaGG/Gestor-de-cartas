@@ -11,7 +11,10 @@ from .forms import ColeccionEditForm
 def home (request): # Pinta una página con render, también hay que darlo de
     cartas = Carta.objects.all()
     return render(request, "index.html", {"cartas": cartas})
-  
+
+# Usu de prueba:
+#   Nombre: prueba
+#   Password: Prueba.Prueba
 def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -30,7 +33,7 @@ def login_user(request):
                 if user.is_active:
                     login(request,user)
                     cartas = Carta.objects.all()
-                    return redirect("home/")
+                    return redirect("home")
                 else:
                     messages.error(request, 'Usuario Inactivo')
             else:
@@ -40,20 +43,20 @@ def login_user(request):
 
     return render(request,'login.html')
 
+@login_required
 def logout_user(request):
     logout(request)
     messages.success(request, 'Has hecho Logout')
     
-    return redirect("home/")
+    return redirect("home")
 
-
+@login_required
 def coleccion_usuario(request):
     coleccion = Coleccion.objects.filter(usuario=request.user).select_related("carta")
     return render(request, "coleccion.html", {"coleccion": coleccion})
 
 
 @login_required
-
 def agregar_a_coleccion(request, carta_id):
     carta = get_object_or_404(Carta, id=carta_id)
 
@@ -69,7 +72,7 @@ def agregar_a_coleccion(request, carta_id):
         coleccion_item.cantidad += 1
         coleccion_item.save()
 
-    return redirect("coleccion_usuario")
+    return redirect("home")
 
 
 @login_required
